@@ -1,0 +1,509 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" name="viewport">
+<meta name="theme-color" content="#fecdd3">
+<title>Alles Gute zum 1. Monat, mein Bebi! 🤍</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            handwriting: ['"Caveat"', 'cursive'],
+          },
+          colors: {
+            romantic: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    html{ overscroll-behavior-y: contain; }
+    html.no-scroll, html.no-scroll body{
+      overflow: hidden;
+      height: 100%;
+    }
+    html.no-scroll body{
+      position: fixed;
+      inset: 0;
+      width: 100%;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .floating-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: floatUp 8s infinite linear;
+      opacity: 0.3;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+      20% { opacity: 0.4; }
+      80% { opacity: 0.3; }
+      100% { transform: translateY(-10vh) rotate(360deg) scale(1.1); opacity: 0; }
+    }
+    .glow-rose {
+      box-shadow: 0 10px 40px -10px rgba(244, 63, 94, 0.35);
+    }
+    #quiz-overlay{
+      padding-top: max(1rem, env(safe-area-inset-top));
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 text-slate-800 min-h-screen relative overflow-x-hidden font-sans selection:bg-rose-200">
+<!-- Floating background decorative hearts -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" id="heart-bg">
+<div class="floating-heart text-rose-300 text-3xl left-[10%]" style="animation-delay: 0s; animation-duration: 9s;">🤍</div>
+<div class="floating-heart text-pink-300 text-2xl left-[25%]" style="animation-delay: 3s; animation-duration: 11s;">✨</div>
+<div class="floating-heart text-rose-400 text-4xl left-[45%]" style="animation-delay: 1.5s; animation-duration: 8s;">🤍</div>
+<div class="floating-heart text-pink-400 text-2xl left-[70%]" style="animation-delay: 4.5s; animation-duration: 10s;">🌹</div>
+<div class="floating-heart text-rose-300 text-3xl left-[88%]" style="animation-delay: 2s; animation-duration: 12s;">💕</div>
+</div>
+<!-- INTRO INTERACTIVE JOKE MODAL / GATE -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-rose-950/70 backdrop-blur-md p-4 transition-all duration-700" id="quiz-overlay">
+<div class="glass-card max-w-lg w-full rounded-3xl p-8 md:p-10 shadow-2xl text-center relative border border-white/80 overflow-hidden transform transition-all duration-300 scale-100">
+<!-- Cute top badge -->
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 text-rose-700 text-sm font-semibold tracking-wide uppercase mb-6 shadow-sm">
+<span class="animate-pulse">⚠️</span> Extrem Wichtige Sicherheitsfrage
+      </div>
+<h2 class="font-serif text-3xl md:text-4xl font-bold text-slate-900 mb-3 leading-tight">
+        Sonntag Kleid? 👗✨
+      </h2>
+<p class="text-slate-600 mb-8 text-base">
+        Bevor du zu unserer Timeline gelangst, musst du diese lebenswichtige Frage für unser nächstes Date wahrheitsgemäß beantworten:
+      </p>
+<div class="relative min-h-[160px] flex items-center justify-center gap-6" id="button-arena">
+<!-- JA Button -->
+<button class="z-10 px-8 py-3.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-rose-400/50 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-2 text-lg cursor-pointer touch-manipulation select-none" id="yes-btn" onclick="acceptQuiz()">
+<span>JA, absolut! 😍</span>
+</button>
+<!-- NEIN Button (DODGING / RUNAWAY BUTTON) -->
+<button class="px-7 py-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-2xl transition-all duration-150 text-base shadow select-none cursor-not-allowed touch-manipulation" id="no-btn">
+<span>Nein 🙈</span>
+</button>
+</div>
+<div class="font-handwriting text-rose-600 text-xl mt-4 h-7" id="dodge-hint">Glaubst du wirklich, dass 'Nein' eine Option ist? 😂</div>
+<div class="mt-6 pt-4 border-t border-rose-100/80 text-xs text-slate-400">
+        Tipp: Es gibt nur eine richtige Antwort, mein Bebi 🤍
+      </div>
+</div>
+</div>
+<!-- MAIN CONTENT CONTAINER -->
+<div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+<!-- Top Header & Couple Hero Section -->
+<header class="text-center mb-16 space-y-6">
+<div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/80 border border-rose-200 shadow-sm text-rose-600 text-sm font-medium backdrop-blur-sm">
+<span class="text-rose-500">🗓️</span> 07. September 2026 • Genau 1 Monat zusammen
+      </div>
+<h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 leading-none">
+        Alles Gute zum <span class="bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 bg-clip-text text-transparent italic">1. Monat</span>, mein Bebi! 🤍
+      </h1>
+<p class="max-w-2xl mx-auto text-lg text-slate-600 font-normal leading-relaxed">Jedes Mal, wenn ich dich sehe, fall ich immer mehr und mehr... Hier ist die Geschichte von unserem Anfang – und ein kleiner Blick auf all das, was noch auf uns wartet!</p>
+<!-- Couple Photo Showcase -->
+<div class="pt-4 flex justify-center">
+<div class="relative group">
+<div class="absolute -inset-2 bg-gradient-to-r from-rose-400 to-pink-500 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition duration-700"></div>
+<div class="relative bg-white p-4 pb-7 rounded-2xl shadow-xl border border-rose-100 transform -rotate-1 hover:rotate-0 transition-transform duration-500 max-w-md">
+<div class="w-full h-80 rounded-xl overflow-hidden bg-rose-100 relative flex items-center justify-center">
+<img alt="Unser schönstes Foto zusammen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="WhatsApp%20Image%202026-09-02%20at%2007.58.55.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-4 right-4 flex justify-between items-end text-white">
+<span class="text-xs font-medium tracking-wider uppercase bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-md">Wir Zwei</span>
+<span class="text-white text-lg drop-shadow-sm">🤍</span>
+</div>
+</div>
+<div class="mt-4 text-center">
+<p class="font-handwriting text-2xl text-slate-700 font-bold">Du &amp; Ich – Auf unendlich viele weitere Monate! ✨</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Stat Badges / Counter -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-20">
+<div class="glass-card rounded-2xl p-4 text-center shadow-sm border border-rose-100/60">
+<div class="text-3xl font-serif font-bold text-rose-600" id="stat-days-couple">–</div>
+<div class="text-xs text-slate-500 uppercase tracking-wider mt-1 font-medium">Tage ein Paar</div>
+</div>
+<div class="glass-card rounded-2xl p-4 text-center shadow-sm border border-rose-100/60">
+<div class="text-3xl font-serif font-bold text-rose-600" id="stat-days-date1">–</div>
+<div class="text-xs text-slate-500 uppercase tracking-wider mt-1 font-medium">Tage seit Date 1</div>
+</div>
+<div class="glass-card rounded-2xl p-4 text-center shadow-sm border border-rose-100/60"><div class="text-3xl font-serif font-bold text-rose-600">100+</div>
+<div class="text-xs text-slate-500 uppercase tracking-wider mt-1 font-medium">Glücksmomente</div></div>
+<div class="glass-card rounded-2xl p-4 text-center shadow-sm border border-rose-100/60">
+<div class="text-3xl font-serif font-bold text-rose-600">∞</div>
+<div class="text-xs text-slate-500 uppercase tracking-wider mt-1 font-medium">Zukunftspläne</div>
+</div>
+</div>
+<!-- TIMELINE SECTION -->
+<section class="mb-24">
+<div class="text-center mb-16">
+<span class="text-rose-600 font-semibold text-sm tracking-widest uppercase">Unsere Reise</span>
+<h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Meilensteine</h2>
+<div class="w-16 h-1 bg-gradient-to-r from-rose-500 to-pink-400 mx-auto mt-3 rounded-full"></div>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-1 bg-gradient-to-b from-rose-300 via-pink-400 to-rose-200 rounded-full hidden md:block"></div>
+<!-- Node 1: Erstes Date (24.06) -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 text-center md:text-right mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-white hover:border-rose-300 transition-all duration-300 group-hover:-translate-y-1">
+<span class="inline-block px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-semibold mb-2">24. Juni 2026</span>
+<h3 class="font-serif text-2xl font-bold text-slate-800">Unser 1. Date 🥂✨</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">
+                Der Tag, an dem alles begann – und ich sofort wusste: Du wirst mein sein.
+              </p>
+<div class="mt-3 font-handwriting text-lg text-rose-500">"Da hat der Zauber angefangen..."</div>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+            💫
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 hidden md:block">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Kapitel 1: Der erste Blick</span>
+</div>
+</div>
+<!-- Node 2: Erster Kuss (27.06) -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 hidden md:block text-right">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Kapitel 2: Schmetterlinge im Bauch</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+            💋
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 text-center md:text-left mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-white hover:border-rose-300 transition-all duration-300 group-hover:-translate-y-1">
+<span class="inline-block px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-semibold mb-2">27. Juni 2026</span>
+<h3 class="font-serif text-2xl font-bold text-slate-800">Unser 1. Kuss 💋✨</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">
+                Der beste Kuss für mich. Definitiv einer der schönsten Momente mit dir.
+              </p>
+<div class="mt-3 font-handwriting text-lg text-pink-600">"Wollte dich ab da nie wieder loslassen!"</div>
+</div>
+</div>
+</div>
+<!-- Node 3: 4tes Date Autokino -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 text-center md:text-right mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-amber-200/80 hover:border-amber-400 transition-all duration-300 group-hover:-translate-y-1 bg-gradient-to-br from-white/90 to-amber-50/50">
+<div class="flex items-center gap-2 justify-center md:justify-end mb-2">
+<span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">Insider des Monats 🍿</span>
+</div>
+<h3 class="font-serif text-2xl font-bold text-slate-800">4. Date: Das legendäre Autokino 🚗🍿</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">
+                Ganz ehrlich: Ich habe bis heute absolut keine Ahnung, worum es in dem Film eigentlich ging! 😂 Wir hatten einfach Besseres zu tun und ich konnte die Augen ohnehin nicht von dir abwenden...
+              </p>
+<div class="mt-3 inline-block px-3 py-1.5 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl text-xs font-medium">
+                Handlung vom Film: 0% verstanden • Date-Rating: 10/10 ⭐
+              </div>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-rose-400 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+            🍿
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 hidden md:block">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Kapitel 3: Bester Kinofilm ever 😉</span>
+</div>
+</div>
+<!-- Node 4: Zusammengekommen & 1. Mal (07.08) -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 hidden md:block text-right">
+<span class="text-rose-500 font-handwriting text-2xl font-bold">Unser offizieller Tag! 🤍</span>
+</div>
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-rose-600 via-pink-600 to-rose-500 text-white flex items-center justify-center text-2xl shadow-xl border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0 animate-pulse">
+            💍
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 text-center md:text-left mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-xl border-2 border-rose-300 bg-gradient-to-br from-rose-50/90 to-white/90 transition-all duration-300 group-hover:-translate-y-1 glow-rose">
+<span class="inline-block px-3 py-1 bg-rose-600 text-white rounded-full text-xs font-bold mb-2 tracking-wide uppercase">07. August 2026</span>
+<h3 class="font-serif text-2xl font-bold text-slate-900">Offiziell ein Paar &amp; unser 1. Mal 💑💍</h3>
+<p class="text-slate-700 mt-2 text-sm leading-relaxed">
+                Ab diesem Tag warst du offiziell meins – Vertrag unterschrieben, Zeugen vorhanden, kein Rücktritt möglich! 😄📝
+              </p>
+<div class="mt-4 flex items-center gap-2 justify-center md:justify-start">
+<span class="text-rose-600 text-sm font-semibold">Offiziell unzertrennlich – auch wenn gefühlt die ganze Zeit jemand im Urlaub ist und wir uns viel zu wenig gesehen haben! 😂🏖️</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Node 4.5: Unser 1. kleiner Streit (29.08) -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 text-center md:text-right mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-purple-200/80 hover:border-purple-300 transition-all duration-300 group-hover:-translate-y-1 bg-gradient-to-br from-white/95 to-purple-50/40">
+<span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold mb-2">29. August 2026</span>
+<h3 class="font-serif text-2xl font-bold text-slate-800">Unser 1. kleiner Streit ⚡🫂</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">Selbst kleine Gewitter gehören dazu.</p>
+<div class="mt-3 font-handwriting text-lg text-purple-600">"Wieder versöhnt kuschelt es sich am schönsten."</div>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+            🫂
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 hidden md:block">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Kapitel 4: Zusammen durch jedes Gewitter</span>
+</div>
+</div>
+<!-- Node 4.6: Date im Himmelblau & Tablići-Sieg (03.09) -->
+<div class="relative flex flex-col md:flex-row items-center mb-16 group">
+<div class="w-full md:w-1/2 md:pr-12 hidden md:block text-right">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Kapitel 5: Himmelblau &amp; Kartenglück</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-rose-400 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+💙
+</div>
+<div class="w-full md:w-1/2 md:pl-12 text-center md:text-left mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-cyan-200/80 hover:border-cyan-300 transition-all duration-300 group-hover:-translate-y-1 bg-gradient-to-br from-white/95 to-cyan-50/40">
+<div class="flex items-center gap-2 justify-center md:justify-start mb-2">
+<span class="px-3 py-1 bg-cyan-100 text-cyan-600 rounded-full text-xs font-semibold">03. September 2026 • Schönstes Date 💙</span>
+</div>
+<h3 class="font-serif text-2xl font-bold text-slate-800">Date im Himmelblau &amp; Tablići-Sieg 💙🃏</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">
+Unser wunderschönes Date im Himmelblau – für mich das schönste Date überhaupt! Und natürlich unvergesslich: Wie ich dich in Tablići abgezockt und gewonnen habe! 🏆😄
+</p>
+<div class="mt-3 font-handwriting text-lg text-cyan-600">"Unvergesslicher Nachmittag &amp; stolzer Sieger!"</div>
+</div>
+</div>
+</div>
+<!-- Node 5: Heute - 1 Monat (07.09) -->
+<div class="relative flex flex-col md:flex-row items-center mb-8 group">
+<div class="w-full md:w-1/2 md:pr-12 text-center md:text-right mb-4 md:mb-0">
+<div class="glass-card p-6 sm:p-7 rounded-3xl shadow-lg border border-rose-200 bg-white/90">
+<span class="inline-block px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold mb-2">Heute • 07. September 2026</span>
+<h3 class="font-serif text-2xl font-bold text-slate-800">1 Monat mit dir! 🥂🎉</h3>
+<p class="text-slate-600 mt-2 text-sm leading-relaxed">
+                Danke für jeden Lachanfall, jedes Lächeln, jedes Foto und vieles mehr. Und das ist erst das allererste Kapitel!
+              </p>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-xl shadow-lg border-4 border-white z-10 md:absolute md:left-1/2 md:-translate-x-1/2 shrink-0">
+            💖
+          </div>
+<div class="w-full md:w-1/2 md:pl-12 hidden md:block">
+<span class="text-slate-400 text-sm font-handwriting text-xl">Heute feiern wir uns!</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FUTURE MEMORIES & BUCKET LIST SECTION -->
+<section class="mb-16">
+<div class="text-center mb-10">
+<span class="text-rose-600 font-semibold text-sm tracking-widest uppercase">Was noch kommt</span>
+<h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Next Adventures: Future Memories</h2>
+<p class="text-slate-600 max-w-xl mx-auto mt-2 text-sm">
+          Einige unserer nächsten Meilensteine stehen schon fest in den Sternen geschrieben:
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<div class="glass-card p-6 rounded-3xl border border-white hover:border-rose-300 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+              ✈️
+            </div>
+<h4 class="font-serif text-xl font-bold text-slate-800">Erster gemeinsamer Urlaub</h4>
+<p class="text-slate-500 text-xs mt-2 leading-relaxed">
+              Meer, Strand, Meeresrauschen und romantische Sonnenuntergänge nur zu zweit.
+            </p>
+</div>
+<div class="mt-5 pt-3 border-t border-rose-100 flex items-center justify-between text-xs font-semibold text-rose-500">
+<span>Status</span>
+<span class="bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">In Vorfreude 🌴</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl border border-white hover:border-pink-300 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+              🛍️
+            </div>
+<h4 class="font-serif text-xl font-bold text-slate-800">Trip nach Bratislava</h4>
+<p class="text-slate-500 text-xs mt-2 leading-relaxed">
+              Gemütlich essen gehen, entspannt spazieren und ausgiebig shoppen im Einkaufszentrum!
+            </p>
+</div>
+<div class="mt-5 pt-3 border-t border-pink-100 flex items-center justify-between text-xs font-semibold text-pink-600">
+<span>Status</span>
+<span class="bg-pink-50 px-2 py-0.5 rounded-full border border-pink-200">Ready to go 🇸🇰</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl border border-orange-200/70 hover:border-orange-300 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group bg-gradient-to-br from-white/90 to-orange-50/40">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+              🎃
+            </div>
+<h4 class="font-serif text-xl font-bold text-slate-800">1. gemeinsames Halloween 🎃👻 (2026)</h4>
+<p class="text-slate-500 text-xs mt-2 leading-relaxed">Gruselig-süße Kostüme, Horrorfilme auf der Couch und Naschkram – du weißt ganz genau, was für ein Spaß uns da erwarten wird! 😉</p>
+</div>
+<div class="mt-5 pt-3 border-t border-orange-100 flex items-center justify-between text-xs font-semibold text-orange-600">
+<span>Status</span>
+<span class="bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200">Geplant für 2026 🕸️</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl border border-white hover:border-purple-300 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+              🛌
+            </div>
+<h4 class="font-serif text-xl font-bold text-slate-800">1. ganzes Wochenende</h4>
+<p class="text-slate-500 text-xs mt-2 leading-relaxed">
+              48 Stunden Dauer-Kuscheln, spätes Frühstück im Bett und einfach die Zeit vergessen.
+            </p>
+</div>
+<div class="mt-5 pt-3 border-t border-purple-100 flex items-center justify-between text-xs font-semibold text-purple-600">
+<span>Status</span>
+<span class="bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">Ganz bald ☕</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl border border-white hover:border-cyan-300 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group md:col-span-2 lg:col-span-1">
+<div>
+<div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+              🏊‍♀️
+            </div>
+<h4 class="font-serif text-xl font-bold text-slate-800">Erstes Mal Schwimmen</h4>
+<p class="text-slate-500 text-xs mt-2 leading-relaxed">
+              Sonne, Wasser, sich gegenseitig nass spritzen und im Bikini / Badehose entspannen.
+            </p>
+</div>
+<div class="mt-5 pt-3 border-t border-cyan-100 flex items-center justify-between text-xs font-semibold text-cyan-600">
+<span>Status</span>
+<span class="bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-200">Wasserscheu? Niemals 💦</span>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE "FUTURE MEMORIES ARE IN PROCESS" TRIGGER -->
+<div class="mt-12 text-center">
+<button class="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white font-bold text-lg shadow-xl hover:shadow-rose-400/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer touch-manipulation select-none" id="future-btn" onclick="triggerFutureLoading()">
+<span class="text-xl" id="future-btn-icon">⏳</span>
+<span id="future-btn-text">Zukunft wird geladen...</span>
+</button>
+<div class="max-w-lg mx-auto mt-6 glass-card p-6 rounded-3xl border border-rose-200 shadow-xl transition-all hidden" id="future-modal">
+<div class="flex items-center justify-center gap-3 text-rose-600 mb-2">
+<svg class="animate-spin h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span class="font-serif font-bold text-xl text-slate-800">Future memories are in process... ⏳🤍</span>
+</div>
+<p class="text-sm text-slate-600 leading-relaxed">
+            Bitte gedulde dich noch ein wenig! Wir schreiben unsere Geschichte gerade Tag für Tag weiter. Jeder neue Tag mit dir wird noch schöner als der letzte!
+          </p>
+<div class="w-full bg-rose-100 rounded-full h-2.5 mt-4 overflow-hidden">
+<div class="bg-gradient-to-r from-rose-500 to-pink-500 h-2.5 rounded-full w-2/3 animate-pulse"></div>
+</div>
+<div class="text-[11px] text-slate-400 mt-2 font-medium">Memory Progress: 1 Monat geschafft • Unendlichkeit lädt...</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="text-center pt-8 border-t border-rose-200/60 pb-12">
+<p class="text-xs text-slate-400 font-medium">Mit ganz viel Liebe für dich gestaltet • Unser Tag: 07.09.2026</p>
+</footer>
+</div>
+<script>
+    document.documentElement.classList.add('no-scroll');
+
+    const noBtn = document.getElementById('no-btn');
+    const hint = document.getElementById('dodge-hint');
+    let dodgeCount = 0;
+
+    const wittyHints = [
+      "Ups, knapp verfehlt! 😜",
+      "Glaubst du wirklich, dass 'Nein' eine Option ist? 😂",
+      "Der Button mag dich nicht anklicken lassen! 👗✨",
+      "Keine Chance! Nur 'JA' funktioniert!",
+      "Nein-Knopf Akkustand: 8%... 🔋",
+      "Nein-Knopf konnte nicht gefunden werden (404) — sieht so aus, als wäre die Antwort Ja 😌"
+    ];
+    const maxDodges = wittyHints.length - 1;
+
+    function runAway() {
+      if (dodgeCount >= maxDodges) return;
+      dodgeCount++;
+
+      const maxDistanceX = 140;
+      const maxDistanceY = 60;
+      const randomX = (Math.random() - 0.5) * maxDistanceX * 2;
+      const randomY = (Math.random() - 0.5) * maxDistanceY * 2;
+
+      noBtn.style.position = 'absolute';
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${Math.max(0.5, 1 - dodgeCount * 0.09)})`;
+
+      hint.innerText = wittyHints[dodgeCount];
+
+      if (dodgeCount >= maxDodges) {
+        noBtn.style.transition = 'opacity .4s ease';
+        noBtn.style.opacity = '0';
+        noBtn.style.pointerEvents = 'none';
+        setTimeout(() => { noBtn.style.display = 'none'; }, 400);
+      }
+    }
+
+    noBtn.addEventListener('mouseenter', runAway);
+    noBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); runAway(); });
+    noBtn.addEventListener('click', (e) => { e.preventDefault(); runAway(); });
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); runAway(); }, { passive: false });
+
+    function acceptQuiz() {
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#f43f5e', '#fb7185', '#fda4af', '#fecdd3', '#ffd1dc']
+      });
+
+      const overlay = document.getElementById('quiz-overlay');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      document.documentElement.classList.remove('no-scroll');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 700);
+    }
+
+    function triggerFutureLoading() {
+      const modal = document.getElementById('future-modal');
+      modal.classList.remove('hidden');
+
+      confetti({
+        particleCount: 60,
+        spread: 60,
+        origin: { y: 0.8 },
+        colors: ['#f43f5e', '#ec4899', '#a855f7']
+      });
+
+      modal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Live-Zähler
+    const dateFirstDate = new Date(2026, 5, 24);   // 24. Juni 2026
+    const dateTogether  = new Date(2026, 7, 7);    // 07. August 2026
+    const now = new Date();
+    document.getElementById('stat-days-couple').textContent = Math.floor((now - dateTogether) / 86400000);
+    document.getElementById('stat-days-date1').textContent = Math.floor((now - dateFirstDate) / 86400000);
+  </script>
+
+
+</body></html>
